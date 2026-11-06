@@ -11,11 +11,12 @@
 <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
+<div class="bg-layer" id="bg-layer" aria-hidden="true"></div>
 <a class="skip" href="#main">跳到主要内容</a>
 
 <header class="nav" id="nav">
   <div class="wrap nav-inner">
-    <a class="brand" href="#top"><span class="dot"></span>119 宿舍</a>
+    <a class="brand" href="#top"><span class="dot"></span><span data-text="siteName">119 宿舍</span></a>
     <nav class="links" aria-label="页面导航">
       <a href="#about">关于</a>
       <a href="#members">成员</a>
@@ -35,21 +36,15 @@
     <div class="wrap hero-inner">
       <div class="hero-split">
         <div class="hero-copy">
-          <p class="eyebrow">2023 级 · 119 宿舍</p>
-          <h1>六个人，一间屋，<br>四年青春。</h1>
-          <p class="lead">
-            这里是 119 的小站。记录我们住在一起的日子：一起吃的每一顿饭、
-            一起熬过的每一个夜，还有阳台上那盆总也养不死的绿萝。
-          </p>
+          <p class="eyebrow" data-text="hero.kicker">2023 级 · 119 宿舍</p>
+          <h1 data-text="hero.title">六个人，一间屋，
+四年青春。</h1>
+          <p class="lead" data-text="hero.lead">这里是 119 的小站。记录我们住在一起的日子：一起吃的每一顿饭、一起熬过的每一个夜，还有阳台上那盆总也养不死的绿萝。</p>
           <div class="cta">
             <a class="btn primary" href="#gallery">看看照片</a>
             <a class="btn ghost" href="#members">认识我们</a>
           </div>
-          <ul class="chips">
-            <li><span class="dot"></span>6 个人</li>
-            <li><span class="dot"></span>2023.09 入住</li>
-            <li><span class="dot"></span>119 宿舍</li>
-          </ul>
+          <ul class="chips" id="chip-list"></ul>
         </div>
         <figure class="hero-photo">
           <button class="hero-zoom" type="button" aria-label="查看 119 宿舍合影大图">
@@ -66,23 +61,14 @@
     <div class="wrap">
       <div class="section-head reveal">
         <p class="eyebrow">ABOUT</p>
-        <h2>关于 119</h2>
+        <h2 data-text="about.title">关于 119</h2>
       </div>
       <div class="about-grid">
         <div class="reveal">
-          <p class="big">
-            119 不是什么特别的房间，就是六个人刚好被分到了一起。
-          </p>
-          <p class="muted">
-            有人负责早八叫起床，有人负责半夜点的烧烤，有人负责把阳台收拾得像样一点。
-            这页网站是我们自己存的相册——不用怕照片过期，也不用怕群文件被清空。
-          </p>
+          <p class="big" data-text="about.headline">119 不是什么特别的房间，就是六个人刚好被分到了一起。</p>
+          <p class="muted" data-text="about.text">有人负责早八叫起床，有人负责半夜点的烧烤，有人负责把阳台收拾得像样一点。这页网站是我们自己存的相册——不用怕照片过期，也不用怕群文件被清空。</p>
         </div>
-        <ul class="stats reveal">
-          <li><strong>320+</strong><span>顿一起吃的饭</span></li>
-          <li><strong>9</strong><span>张照片挂在墙上</span></li>
-          <li><strong>1</strong><span>盆活到现在的绿萝</span></li>
-        </ul>
+        <ul class="stats reveal" id="stats-list"></ul>
       </div>
     </div>
   </section>
@@ -92,47 +78,11 @@
     <div class="wrap">
       <div class="section-head reveal">
         <p class="eyebrow">ROOMMATES</p>
-        <h2>住在这里的人</h2>
-        <p class="sub">六个人，六种作息，一个群聊。</p>
+        <h2 data-text="members.title">住在这里的人</h2>
+        <p class="sub" data-text="members.sub">六个人，六种作息，一个群聊。</p>
       </div>
-      <ul class="members">
-        <li class="card reveal">
-          <span class="avatar a1" aria-hidden="true">东</span>
-          <h3>刘东杨</h3>
-          <p class="role">119 成员</p>
-          <p class="note">待填：TA 的绰号是怎么来的？</p>
-        </li>
-        <li class="card reveal">
-          <span class="avatar a2" aria-hidden="true">浩</span>
-          <h3>刘浩宇</h3>
-          <p class="role">119 成员</p>
-          <p class="note">待填：TA 最常点的那家外卖。</p>
-        </li>
-        <li class="card reveal">
-          <span class="avatar a3" aria-hidden="true">福</span>
-          <h3>张福鑫</h3>
-          <p class="role">119 成员</p>
-          <p class="note">待填：TA 最擅长的一件事。</p>
-        </li>
-        <li class="card reveal">
-          <span class="avatar a4" aria-hidden="true">轩</span>
-          <h3>韩朋轩</h3>
-          <p class="role">119 成员</p>
-          <p class="note">待填：TA 的作息是几点睡、几点起。</p>
-        </li>
-        <li class="card reveal">
-          <span class="avatar a5" aria-hidden="true">彤</span>
-          <h3>包宇彤</h3>
-          <p class="role">119 成员</p>
-          <p class="note">待填：TA 说过最离谱的一句话。</p>
-        </li>
-        <li class="card reveal">
-          <span class="avatar a6" aria-hidden="true">嘉</span>
-          <h3>孔维嘉</h3>
-          <p class="role">119 成员</p>
-          <p class="note">待填：TA 在宿舍的固定位置（床/桌）在哪。</p>
-        </li>
-      </ul>
+      <ul class="members" id="member-list"></ul>
+      <noscript><p class="muted">成员信息需要开启 JavaScript 才能显示。</p></noscript>
     </div>
   </section>
 
@@ -141,8 +91,8 @@
     <div class="wrap">
       <div class="section-head reveal">
         <p class="eyebrow">GALLERY</p>
-        <h2>照片墙</h2>
-        <p class="sub">点开任意一张看大图，可以用键盘 ← → 翻页。</p>
+        <h2 data-text="gallery.title">照片墙</h2>
+        <p class="sub" data-text="gallery.sub">点开任意一张看大图，可以用键盘 ← → 翻页。</p>
       </div>
       <div class="grid" id="photo-grid"></div>
       <noscript><p class="muted">照片墙需要开启 JavaScript 才能显示。</p></noscript>
@@ -154,39 +104,18 @@
     <div class="wrap">
       <div class="section-head reveal">
         <p class="eyebrow">MOMENTS</p>
-        <h2>我们的日常</h2>
+        <h2 data-text="moments.title">我们的日常</h2>
       </div>
-      <ol class="timeline reveal">
-        <li class="tl-item">
-          <time>2023.09</time>
-          <h3>搬进 119</h3>
-          <p>六个人拖着行李箱在楼道里第一次见面，谁也没想到后来会这么合拍。</p>
-        </li>
-        <li class="tl-item">
-          <time>2024.03</time>
-          <h3>阳台改造计划</h3>
-          <p>用两个下午把阳台收拾成小花园。绿萝是唯一的幸存者。</p>
-        </li>
-        <li class="tl-item">
-          <time>2024.12</time>
-          <h3>期末周</h3>
-          <p>泡面、咖啡和四盏台灯，一起熬到天亮。第二天谁都没去上课。</p>
-        </li>
-        <li class="tl-item">
-          <time>2025.10</time>
-          <h3>第一次集体生日</h3>
-          <p>蛋糕买小了，六个人分着吃，蜡烛插了两遍。</p>
-        </li>
-      </ol>
+      <ol class="timeline reveal" id="timeline"></ol>
     </div>
   </section>
 </main>
 
 <footer class="footer">
   <div class="wrap footer-inner">
-    <p class="brand-line"><span class="dot"></span>119 宿舍</p>
-    <p class="muted">由我们自己维护 · <span id="year">2026</span> · 照片版权归室友们所有</p>
-    <p class="muted small">本站为纯静态页面，不收集任何访问数据。</p>
+    <p class="brand-line"><span class="dot"></span><span data-text="siteName">119 宿舍</span></p>
+    <p class="muted" data-text="footer.note">由我们自己维护 · 2026 · 照片版权归室友们所有</p>
+    <p class="muted small" data-text="footer.small">本站为纯静态页面，不收集任何访问数据。</p>
   </div>
 </footer>
 
@@ -204,17 +133,24 @@
 
 <!-- ==================== 加照片面板 ==================== -->
 <button class="fab" id="fab-add" type="button" aria-controls="photo-panel" aria-expanded="false">
-  <span class="fab-plus" aria-hidden="true">＋</span>加照片
+  <span class="fab-plus" aria-hidden="true">＋</span>管理
 </button>
 
 <div class="panel" id="photo-panel" hidden>
   <div class="panel-card" role="dialog" aria-modal="true" aria-labelledby="panel-title">
     <div class="panel-head">
-      <h2 id="panel-title">添加照片</h2>
+      <h2 id="panel-title">管理本站</h2>
       <button class="panel-close" id="panel-close" type="button" aria-label="关闭">✕</button>
     </div>
 
-    <div class="panel-body">
+    <div class="panel-tabs" role="tablist" aria-label="切换要改的内容">
+      <button class="tab is-active" id="tab-photos" type="button" role="tab" aria-selected="true" aria-controls="pane-photos">照片</button>
+      <button class="tab" id="tab-members" type="button" role="tab" aria-selected="false" aria-controls="pane-members">成员</button>
+      <button class="tab" id="tab-text" type="button" role="tab" aria-selected="false" aria-controls="pane-text">文字</button>
+    </div>
+
+    <!-- ---------- 照片 ---------- -->
+    <div class="panel-body" id="pane-photos" role="tabpanel" aria-labelledby="tab-photos">
       <label class="dropzone" id="dropzone">
         <input type="file" id="file-input" accept="image/*" multiple>
         <strong>点这里选照片，或者直接拖进来</strong>
@@ -225,36 +161,87 @@
       <p class="panel-msg" id="panel-msg" role="status" hidden></p>
 
       <div class="panel-actions">
-        <button class="btn primary" id="btn-download" type="button" disabled>下载压缩后的照片</button>
+        <button class="btn primary" id="btn-download" type="button" disabled>下载照片</button>
         <button class="btn ghost" id="btn-copy" type="button" disabled>复制 photos.js</button>
+        <button class="btn primary" id="btn-publish" type="button" disabled>发布照片</button>
       </div>
 
-      <details class="publish">
-        <summary>一键发布到 GitHub <span class="muted small">（可选，需要 Token）</span></summary>
+      <p class="tiny">
+        没有 Token 也可以：点「下载照片」放进仓库的 <code>images/</code>，
+        再用「复制 photos.js」覆盖同名文件。
+      </p>
+    </div>
+
+    <!-- ---------- 成员 ---------- -->
+    <div class="panel-body" id="pane-members" role="tabpanel" aria-labelledby="tab-members" hidden>
+      <p class="tiny">
+        改完立刻能看到效果（只在本机）。想撤销就刷新页面；
+        点「发布」才会让所有人看到。头像方块里的字可以自己填。
+      </p>
+
+      <ul class="member-editor" id="member-editor"></ul>
+
+      <button class="btn ghost" id="btn-add-member" type="button">＋ 再加一位</button>
+
+      <div class="panel-actions">
+        <button class="btn ghost" id="btn-members-copy" type="button">复制 members.js</button>
+        <button class="btn primary" id="btn-members-publish" type="button">发布成员</button>
+      </div>
+
+      <p class="panel-msg" id="member-msg" role="status" hidden></p>
+    </div>
+
+    <!-- ---------- 文字与背景 ---------- -->
+    <div class="panel-body" id="pane-text" role="tabpanel" aria-labelledby="tab-text" hidden>
+      <p class="tiny">
+        改完立刻在本机生效，点「发布」才会同步给所有人。
+        <code>{count}</code> 会替换成人数，<code>{year}</code> 会替换成年份。
+      </p>
+
+      <div id="text-form"></div>
+
+      <div class="bg-box">
+        <p class="bg-title">网页背景</p>
+        <div class="bg-actions">
+          <label class="btn ghost" for="bg-input">选一张图片</label>
+          <input type="file" id="bg-input" accept="image/*" hidden>
+          <button class="btn ghost" id="bg-clear" type="button" disabled>去掉背景</button>
+        </div>
+        <img id="bg-preview" alt="背景预览" hidden>
+        <p class="tiny" id="bg-note">还没设置背景，现在用的是纯色。</p>
+      </div>
+
+      <div class="panel-actions">
+        <button class="btn primary" id="btn-text-publish" type="button">发布文字与背景</button>
+      </div>
+
+      <p class="panel-msg" id="text-msg" role="status" hidden></p>
+    </div>
+
+    <!-- ---------- 共用：GitHub 配置 ---------- -->
+    <div class="panel-foot">
+      <details class="publish" id="gh-config">
+        <summary>发布到 GitHub <span class="muted small">（需要 Token，填一次就记住）</span></summary>
         <div class="fields">
           <label>仓库 owner<input id="gh-owner" value="WXHP452" placeholder="your-name" autocomplete="off" spellcheck="false"></label>
           <label>仓库名<input id="gh-repo" value="dorm119" placeholder="dorm119" autocomplete="off" spellcheck="false"></label>
           <label>分支<input id="gh-branch" placeholder="main" value="main" autocomplete="off" spellcheck="false"></label>
           <label>Token<input id="gh-token" type="password" placeholder="github_pat_... 只存在这台设备" autocomplete="off"></label>
         </div>
-        <button class="btn primary block" id="btn-publish" type="button" disabled>发布到仓库</button>
         <p class="tiny">
           Token 只保存在当前浏览器的 localStorage 里，不会发到别的地方。
           建议用 Fine-grained token，只授权这一个仓库的 <b>Contents: Read and write</b>。
-          发完约 1 分钟 GitHub Pages 才更新。
+          发布后约 1 分钟 GitHub Pages 才更新。
         </p>
       </details>
-
-      <p class="tiny">
-        没有 Token 也可以：点「下载压缩后的照片」，把它们放进 GitHub 仓库的 <code>images/</code>，
-        再用「复制 photos.js」的内容覆盖同名文件，提交即可。
-      </p>
     </div>
   </div>
 </div>
 
 <script src="photos.js"></script>
+<script src="members.js"></script>
+<script src="content.js"></script>
 <script src="app.js"></script>
-<script src="photo-admin.js"></script>
+<script src="admin.js"></script>
 </body>
 </html>

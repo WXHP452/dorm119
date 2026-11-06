@@ -56,8 +56,57 @@
     grid.appendChild(frag);
   }
 
-  // 让「加照片」面板能在新照片后重绘
+  // 让「管理」面板能在改动后重绘
   window.renderGallery = renderGallery;
+
+  /* ---------------- 成员 ---------------- */
+
+  var memberList = $('#member-list');
+
+  function renderMembers() {
+    if (!memberList || typeof MEMBERS === 'undefined') return;
+
+    memberList.innerHTML = '';
+
+    if (!MEMBERS.length) {
+      var empty = document.createElement('li');
+      empty.className = 'muted';
+      empty.textContent = '还没有成员信息——点右下角「管理」→「成员」加几位。';
+      memberList.appendChild(empty);
+      return;
+    }
+
+    MEMBERS.forEach(function (person, index) {
+      var name = (person.name || '').trim();
+
+      var li = document.createElement('li');
+      li.className = 'card';
+
+      var avatar = document.createElement('span');
+      avatar.className = 'avatar a' + ((index % 6) + 1);
+      avatar.setAttribute('aria-hidden', 'true');
+      avatar.textContent = (person.avatar || name.slice(-1) || '?').slice(0, 2);
+
+      var title = document.createElement('h3');
+      title.textContent = name || '（未填姓名）';
+
+      var role = document.createElement('p');
+      role.className = 'role';
+      role.textContent = person.role || '';
+
+      var note = document.createElement('p');
+      note.className = 'note';
+      note.textContent = person.note || '';
+
+      li.appendChild(avatar);
+      li.appendChild(title);
+      li.appendChild(role);
+      li.appendChild(note);
+      memberList.appendChild(li);
+    });
+  }
+
+  window.renderMembers = renderMembers;
 
   /* ---------------- 大图查看 ---------------- */
 
@@ -191,12 +240,122 @@
     reveals.forEach(function (el) { el.classList.add('in'); });
   }
 
-  /* ---------------- 页脚年份 ---------------- */
+  /* ---------------- 全站文字（content.js） ---------------- */
 
-  var year = $('#year');
-  if (year) year.textContent = new Date().getFullYear();
+  function getPath(obj, path) {
+    return path.split('.').reduce(function (acc, key) {
+      return acc == null ? undefined : acc[key];
+    }, obj);
+  }
+
+  // {count} → 人数，{year} → 今年
+  function fillText(value) {
+    var out = String(value == null ? '' : value);
+    if (typeof MEMBERS !== 'undefined') {
+      out = out.replace(/\{count\}/g, String(MEMBERS.length));
+    }
+    return out.replace(/\{year\}/g, String(new Date().getFullYear()));
+  }
+
+  function applyContent() {
+    if (typeof CONTENT === 'undefined') return;
+
+    if (CONTENT.siteName) document.title = CONTENT.siteName + ' · 我们的宿舍';
+
+    var nodes = document.querySelectorAll('[data-text]');
+    for (var i = 0; i < nodes.length; i++) {
+      var value = getPath(CONTENT, nodes[i].getAttribute('data-text'));
+      if (typeof value === 'string' && value.length) {
+        nodes[i].textContent = fillText(value);
+      }
+    }
+
+    renderChips();
+    renderStats();
+    renderTimeline();
+    applyBackground();
+  }
+
+  function renderChips() {
+    var list = document.getElementById('chip-list');
+    if (!list) return;
+    list.innerHTML = '';
+
+    (CONTENT.chips || []).forEach(function (text) {
+      var li = document.createElement('li');
+      var dot = document.createElement('span');
+      dot.className = 'dot';
+      li.appendChild(dot);
+      li.appendChild(document.createTextNode(fillText(text)));
+      list.appendChild(li);
+    });
+  }
+
+  function renderStats() {
+    var list = document.getElementById('stats-list');
+    if (!list) return;
+    list.innerHTML = '';
+
+    (CONTENT.stats || []).forEach(function (item) {
+      var li = document.createElement('li');
+      var strong = document.createElement('strong');
+      strong.textContent = fillText(item.value);
+      var span = document.createElement('span');
+      span.textContent = fillText(item.label);
+      li.appendChild(strong);
+      li.appendChild(span);
+      list.appendChild(li);
+    });
+
+    list.classList.add('in');
+  }
+
+  function renderTimeline() {
+    var list = document.getElementById('timeline');
+    if (!list) return;
+    list.innerHTML = '';
+
+    var items = (CONTENT.moments && CONTENT.moments.items) || [];
+    items.forEach(function (item) {
+      var li = document.createElement('li');
+      li.className = 'tl-item';
+
+      var time = document.createElement('time');
+      time.textContent = fillText(item.time);
+
+      var title = document.createElement('h3');
+      title.textContent = fillText(item.title);
+
+      var text = document.createElement('p');
+      text.textContent = fillText(item.text);
+
+      li.appendChild(time);
+      li.appendChild(title);
+      li.appendChild(text);
+      list.appendChild(li);
+    });
+
+    list.classList.add('in');
+  }
+
+  function applyBackground() {
+    var layer = document.getElementById('bg-layer');
+    if (!layer) return;
+
+    if (CONTENT.background) {
+      layer.style.backgroundImage = 'url("' + CONTENT.background + '")';
+      document.body.classList.add('has-bg');
+    } else {
+      layer.style.backgroundImage = '';
+      document.body.classList.remove('has-bg');
+    }
+  }
+
+  window.applyContent = applyContent;
 
   /* ---------------- 启动 ---------------- */
 
   renderGallery();
+  renderMembers();
+  applyContent();
 })();
