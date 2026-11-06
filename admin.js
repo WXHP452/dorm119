@@ -68,6 +68,7 @@
     msgEl.hidden = false;
     msgEl.textContent = text;
     msgEl.classList.toggle('is-error', !!isError);
+    if (msgEl.scrollIntoView) msgEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   }
 
   function hideMsg() {
@@ -93,6 +94,41 @@
     if (!box) return;
     box.open = true;
     if (box.scrollIntoView) box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  /* ---------------- 本机草稿（刷新 / 关页面都不丢） ---------------- */
+
+  var DRAFT_KEY = 'dorm119-draft-v1';
+  var saveTimer = null;
+
+  function setDraftFlag(on) {
+    var flag = document.getElementById('draft-flag');
+    if (flag) flag.hidden = !on;
+  }
+
+  function saveDraft() {
+    setDraftFlag(true);
+    if (saveTimer) clearTimeout(saveTimer);
+    saveTimer = setTimeout(function () {
+      try {
+        localStorage.setItem(DRAFT_KEY, JSON.stringify({
+          v: 1,
+          savedAt: new Date().toISOString(),
+          content: CONTENT,
+          members: typeof MEMBERS === 'undefined' ? [] : MEMBERS,
+        }));
+      } catch (e) { /* 存不下就算了，不影响编辑 */ }
+    }, 400);
+  }
+
+  function clearDraft() {
+    if (saveTimer) clearTimeout(saveTimer);
+    try { localStorage.removeItem(DRAFT_KEY); } catch (e) {}
+    setDraftFlag(false);
+  }
+
+  function hasDraft() {
+    try { return !!localStorage.getItem(DRAFT_KEY); } catch (e) { return false; }
   }
 
   /* ---------------- 打开 / 关闭 ---------------- */
@@ -599,6 +635,7 @@
     memberMsgEl.hidden = false;
     memberMsgEl.textContent = text;
     memberMsgEl.classList.toggle('is-error', !!isError);
+    if (memberMsgEl.scrollIntoView) memberMsgEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   }
 
   function refreshMembers() {
@@ -618,6 +655,7 @@
     input.addEventListener('input', function () {
       person[key] = input.value;
       refreshMembers();
+      saveDraft();
     });
     return input;
   }
@@ -649,6 +687,7 @@
       MEMBERS[index] = tmp;
       renderMemberEditor();
       refreshMembers();
+      saveDraft();
     });
 
     var down = document.createElement('button');
@@ -663,6 +702,7 @@
       MEMBERS[index] = tmp;
       renderMemberEditor();
       refreshMembers();
+      saveDraft();
     });
 
     var del = document.createElement('button');
@@ -674,7 +714,8 @@
       MEMBERS.splice(index, 1);
       renderMemberEditor();
       refreshMembers();
-      sayMember('已删除一位（还没发布，刷新页面可撤销）。');
+      saveDraft();
+      sayMember('已删除一位（还没发布，可以点「放弃未发布的改动」撤销）。');
     });
 
     tools.appendChild(up);
@@ -709,6 +750,7 @@
       if (typeof MEMBERS === 'undefined') return;
       MEMBERS.push({ avatar: '', name: '', role: '119 成员', note: '' });
       renderMemberEditor();
+      saveDraft();
       var rows = memberEditor.querySelectorAll('.member-row');
       var last = rows[rows.length - 1];
       if (last) {
@@ -756,6 +798,7 @@
       sayMember('正在发布成员信息 ……');
       try {
         await putFile('members.js', base64OfText(buildMembersFile()), '更新成员信息');
+        clearDraft();
         sayMember('已发布，约 1 分钟后生效。');
       } catch (err) {
         sayMember('发布失败：' + err.message, true);
@@ -811,6 +854,7 @@
   }
 
   function refreshSite() {
+    saveDraft();
     if (typeof window.applyContent === 'function') window.applyContent();
   }
 
@@ -819,6 +863,7 @@
     textMsgEl.hidden = false;
     textMsgEl.textContent = text;
     textMsgEl.classList.toggle('is-error', !!isError);
+    if (textMsgEl.scrollIntoView) textMsgEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   }
 
   function smallButton(text, title, onClick) {
@@ -1089,6 +1134,18 @@
     return head + 'const CONTENT = ' + JSON.stringify(data, null, 2) + ';\n';
   }
 
+  var btnTextCopy = $('#btn-text-copy');
+  if (btnTextCopy) {
+    btnTextCopy.addEventListener('click', async function () {
+      try {
+        await copyText(buildContentFile());
+        sayText('已复制 content.js 的全部内容，粘到仓库同名文件里即可。');
+      } catch (err) {
+        sayText('复制被浏览器拦了，可以手动编辑 content.js。', true);
+      }
+    });
+  }
+
   if (btnTextPublish) {
     btnTextPublish.addEventListener('click', async function () {
       btnTextPublish.disabled = true;
@@ -1104,6 +1161,7 @@
 
         sayText('正在发布文字 ……');
         await putFile('content.js', base64OfText(buildContentFile()), '更新站点文字');
+        clearDraft();
         sayText('已发布，约 1 分钟后生效。');
       } catch (err) {
         sayText('发布失败：' + err.message, true);
@@ -1113,10 +1171,22 @@
     });
   }
 
+  /* ---------------- 放弃改动 ---------------- */
+
+  var btnDiscard = $('#btn-discard');
+  if (btnDiscard) {
+    btnDiscard.addEventListener('click', function () {
+      if (!window.confirm('放弃所有未发布的改动？页面会重新加载成线上版本。')) return;
+      clearDraft();
+      window.location.reload();
+    });
+  }
+
   /* ---------------- 初始状态 ---------------- */
 
   refreshLabels();
   renderMemberEditor();
   buildTextForm();
   refreshBg();
+  setDraftFlag(hasDraft());
 })();

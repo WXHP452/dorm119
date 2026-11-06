@@ -737,7 +737,19 @@ body.no-scroll { overflow: hidden; }
   background: var(--bg);
   border-bottom: 1px solid var(--line);
 }
-.panel-head h2 { font-size: 1.05rem; }
+.panel-head h2 { font-size: 1.05rem; margin-right: auto; }
+
+.draft-flag {
+  padding: .15em .55em;
+  margin-right: 8px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .03em;
+  white-space: nowrap;
+}
 .panel-close {
   border: 0;
   background: transparent;

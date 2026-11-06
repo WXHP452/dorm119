@@ -8,6 +8,27 @@
 
   var $ = function (sel, root) { return (root || document).querySelector(sel); };
 
+  /* ---------------- 本机草稿（改了没发布也不丢） ---------------- */
+
+  function applyDraft() {
+    var raw;
+    try { raw = localStorage.getItem('dorm119-draft-v1'); } catch (e) { return; }
+    if (!raw) return;
+
+    var draft;
+    try { draft = JSON.parse(raw); } catch (e) { return; }
+    if (!draft || draft.v !== 1) return;
+
+    if (draft.content && typeof CONTENT !== 'undefined') {
+      Object.keys(CONTENT).forEach(function (key) { delete CONTENT[key]; });
+      Object.assign(CONTENT, draft.content);
+    }
+    if (draft.members && typeof MEMBERS !== 'undefined') {
+      MEMBERS.length = 0;
+      draft.members.forEach(function (person) { MEMBERS.push(person); });
+    }
+  }
+
   /* ---------------- 照片墙 ---------------- */
 
   var grid = $('#photo-grid');
@@ -355,6 +376,7 @@
 
   /* ---------------- 启动 ---------------- */
 
+  applyDraft();
   renderGallery();
   renderMembers();
   applyContent();

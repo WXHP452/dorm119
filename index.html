@@ -140,6 +140,7 @@
   <div class="panel-card" role="dialog" aria-modal="true" aria-labelledby="panel-title">
     <div class="panel-head">
       <h2 id="panel-title">管理本站</h2>
+      <span class="draft-flag" id="draft-flag" hidden>有未发布改动</span>
       <button class="panel-close" id="panel-close" type="button" aria-label="关闭">✕</button>
     </div>
 
@@ -212,6 +213,7 @@
       </div>
 
       <div class="panel-actions">
+        <button class="btn ghost" id="btn-text-copy" type="button">复制 content.js</button>
         <button class="btn primary" id="btn-text-publish" type="button">发布文字与背景</button>
       </div>
 
@@ -234,6 +236,8 @@
           发布后约 1 分钟 GitHub Pages 才更新。
         </p>
       </details>
+
+      <button class="btn ghost" id="btn-discard" type="button">放弃未发布的改动</button>
     </div>
   </div>
 </div>
